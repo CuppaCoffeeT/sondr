@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../context/AuthContext'
 import PromptHeader from '../components/PromptHeader'
 import BottomNav from '../components/BottomNav'
 import Avatar from '../components/Avatar'
@@ -8,6 +9,7 @@ import Avatar from '../components/Avatar'
 export default function PostDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { session } = useAuth()
   const [post, setPost] = useState(null)
   const [prompt, setPrompt] = useState(null)
   const [prevId, setPrevId] = useState(null)
@@ -109,9 +111,23 @@ export default function PostDetail() {
           </button>
         </div>
 
-        <button className="btn bg-sondr-blue text-white rounded-pill fw-bold px-5 py-2" onClick={() => navigate('/home')}>
-          BACK
-        </button>
+        <div className="d-flex gap-2">
+          <button className="btn bg-sondr-blue text-white rounded-pill fw-bold px-5 py-2" onClick={() => navigate('/home')}>
+            BACK
+          </button>
+          {session?.user?.id === post.user_id && (
+            <button
+              className="btn btn-outline-danger rounded-pill fw-bold px-4 py-2"
+              onClick={async () => {
+                if (!confirm('Delete this post?')) return
+                await supabase.from('posts').delete().eq('id', post.id)
+                navigate('/home', { replace: true })
+              }}
+            >
+              DELETE
+            </button>
+          )}
+        </div>
       </div>
 
       <BottomNav />
