@@ -12,6 +12,7 @@ export default function NewPost() {
   const { prompt } = useCurrentPrompt()
   const { session } = useAuth()
   const navigate = useNavigate()
+  const [caption, setCaption] = useState('')
   const [story, setStory] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -47,6 +48,7 @@ export default function NewPost() {
           user_id: userId,
           prompt_id: prompt.id,
           photo_url: urlData.publicUrl,
+          caption,
           story,
         })
 
@@ -76,11 +78,18 @@ export default function NewPost() {
       </div>
 
       <form className="d-flex flex-column gap-3 p-3" onSubmit={handleSubmit}>
-        {/* Photo */}
+        {/* Photo + Caption */}
         <div className="bg-white rounded-3 border overflow-hidden">
           <div style={{ aspectRatio: '1', overflow: 'hidden' }}>
             <img src={photoPreview} alt="Your photo" className="w-100 h-100 aspect-square" />
           </div>
+          <input
+            type="text"
+            placeholder="Insert Caption here..."
+            value={caption}
+            onChange={e => setCaption(e.target.value)}
+            className="form-control caption-input py-2"
+          />
         </div>
 
         {/* Story Section */}

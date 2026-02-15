@@ -76,8 +76,32 @@ export function AuthProvider({ children }) {
     setProfile(null)
   }
 
+  async function deleteAccount() {
+    if (!session) return
+    const userId = session.user.id
+
+    // Delete all user's posts
+    const { error: postsError } = await supabase
+      .from('posts')
+      .delete()
+      .eq('user_id', userId)
+    if (postsError) throw postsError
+
+    // Delete user's profile
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .delete()
+      .eq('id', userId)
+    if (profileError) throw profileError
+
+    // Sign out
+    await supabase.auth.signOut()
+    setSession(null)
+    setProfile(null)
+  }
+
   return (
-    <AuthContext.Provider value={{ session, profile, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ session, profile, loading, signUp, signIn, signOut, deleteAccount }}>
       {children}
     </AuthContext.Provider>
   )

@@ -7,11 +7,13 @@ import BottomNav from '../components/BottomNav'
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
 
 export default function MyCapsule() {
-  const { session, profile } = useAuth()
+  const { session, profile, signOut, deleteAccount } = useAuth()
   const navigate = useNavigate()
   const [monthData, setMonthData] = useState({})
   const [loading, setLoading] = useState(true)
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
+  const [showMenu, setShowMenu] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     if (!session) return
@@ -57,10 +59,46 @@ export default function MyCapsule() {
           <span className="prompt-pill rounded-pill fw-semibold py-2 px-4">
             {profile?.username || 'Your'}'s Capsule
           </span>
-          <div className="d-flex gap-1">
-            <span className="dot dot--small" />
-            <span className="dot dot--small" />
-            <span className="dot dot--small" />
+          <div className="position-relative">
+            <button
+              className="btn p-0 border-0 bg-transparent d-flex gap-1"
+              onClick={() => setShowMenu(v => !v)}
+              aria-label="Settings"
+            >
+              <span className="dot dot--small" />
+              <span className="dot dot--small" />
+              <span className="dot dot--small" />
+            </button>
+            {showMenu && (
+              <div
+                className="position-absolute end-0 mt-2 bg-white rounded-3 shadow-sm border py-1"
+                style={{ minWidth: 160, zIndex: 1050 }}
+              >
+                <button
+                  className="btn btn-sm w-100 text-start px-3 py-2"
+                  onClick={() => { signOut(); navigate('/', { replace: true }) }}
+                >
+                  Log Out
+                </button>
+                <button
+                  className="btn btn-sm w-100 text-start px-3 py-2 text-danger"
+                  disabled={deleting}
+                  onClick={async () => {
+                    if (!confirm('Are you sure? This will permanently delete your account and all your posts.')) return
+                    setDeleting(true)
+                    try {
+                      await deleteAccount()
+                      navigate('/', { replace: true })
+                    } catch (err) {
+                      alert(err.message || 'Failed to delete account')
+                      setDeleting(false)
+                    }
+                  }}
+                >
+                  {deleting ? 'Deleting...' : 'Delete Account'}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
