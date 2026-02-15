@@ -1,0 +1,255 @@
+:root {
+  --color-blue: #2962FF;
+  --color-coral: #E86C5F;
+  --color-pink-bg: #FFF0EB;
+  --color-yellow: #FFD54F;
+  --color-yellow-dark: #F5C842;
+  --color-white: #FFFFFF;
+  --nav-height: 64px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--color-pink-bg) !important;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Coral dots used across auth pages */
+.dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-coral);
+  display: inline-block;
+}
+
+.dot--small {
+  width: 14px;
+  height: 14px;
+}
+
+/* Bottom nav page spacer */
+.has-bottom-nav {
+  padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px) + 8px);
+}
+
+/* Reusable color utilities not in Bootstrap */
+.bg-sondr-blue { background-color: var(--color-blue) !important; }
+.bg-sondr-coral { background-color: var(--color-coral) !important; }
+.bg-sondr-pink { background-color: var(--color-pink-bg) !important; }
+.bg-sondr-yellow { background-color: var(--color-yellow) !important; }
+.text-coral { color: var(--color-coral) !important; }
+.text-sondr-blue { color: var(--color-blue) !important; }
+.border-sondr-blue { border-color: var(--color-blue) !important; }
+.border-coral { border-color: var(--color-coral) !important; }
+
+/* Pill-shaped buttons/inputs */
+.rounded-pill-lg { border-radius: 24px !important; }
+
+/* Square aspect ratio for images */
+.aspect-square {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+/* Bottom nav */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px));
+  z-index: 1030;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.bottom-nav .btn {
+  font-size: 0.7rem;
+}
+
+.bottom-nav .btn .nav-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+/* Post card */
+.post-card {
+  border: 2px solid var(--color-blue);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  background: white;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.post-card__caption {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: calc(2lh + 16px);
+  text-align: center;
+}
+
+/* Camera shutter button */
+.shutter-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid var(--color-coral);
+  padding: 4px;
+  background: none;
+}
+
+.shutter-btn__inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--color-coral);
+  display: block;
+  transition: transform 0.1s;
+}
+
+.shutter-btn:active .shutter-btn__inner {
+  transform: scale(0.9);
+}
+
+/* Prompt header pill */
+.prompt-pill {
+  background-color: rgba(255, 240, 235, 0.9);
+  color: var(--color-coral);
+  max-width: 320px;
+}
+
+/* Story section on new post */
+.story-section {
+  background: var(--color-yellow);
+  border: 2px solid var(--color-coral);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.story-section textarea {
+  background: rgba(255,255,255,0.3);
+  border: none;
+  color: var(--color-coral);
+  resize: none;
+}
+
+.story-section textarea::placeholder {
+  color: var(--color-coral);
+  opacity: 0.6;
+}
+
+.story-section textarea:focus {
+  background: rgba(255,255,255,0.4);
+  box-shadow: none;
+  color: var(--color-coral);
+}
+
+/* Post detail card */
+.post-detail-card {
+  border: 2px solid var(--color-blue);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Capsule month thumbnail */
+.capsule-thumb {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid var(--color-coral);
+}
+
+.capsule-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.capsule-empty {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: rgba(232, 108, 95, 0.08);
+  border: 2px dashed rgba(232, 108, 95, 0.25);
+}
+
+/* Capsule month label */
+.capsule-month-label {
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  letter-spacing: 2px;
+}
+
+/* Viewfinder */
+.viewfinder {
+  aspect-ratio: 1;
+  max-width: 340px;
+  overflow: hidden;
+}
+
+.viewfinder video,
+.viewfinder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Caption input on new post */
+.caption-input {
+  border: none;
+  border-top: 1px solid #ddd;
+  background: rgba(255, 240, 235, 0.5);
+  color: var(--color-coral);
+  text-align: center;
+}
+
+.caption-input::placeholder {
+  color: var(--color-coral);
+  opacity: 0.6;
+}
+
+.caption-input:focus {
+  background: rgba(255, 240, 235, 0.7);
+  box-shadow: none;
+  color: var(--color-coral);
+}
+
+/* Login coral inputs */
+.input-coral {
+  background: var(--color-coral) !important;
+  color: white !important;
+  border: none !important;
+  text-align: center;
+}
+
+.input-coral::placeholder {
+  color: rgba(255,255,255,0.7) !important;
+}
+
+.input-coral:focus {
+  box-shadow: 0 0 0 0.2rem rgba(232,108,95,0.4) !important;
+}
+
+/* Feed story preview */
+.post-card__story {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
