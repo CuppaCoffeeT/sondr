@@ -41,7 +41,7 @@ export default function Home() {
     <div className="has-bottom-nav">
       <PromptHeader text={prompt?.text} variant="blue" />
 
-      <div className="container-fluid p-3">
+      <div className="container-fluid p-3" style={{ maxWidth: 960, margin: '0 auto' }}>
         {(loading || promptLoading) ? (
           <p className="text-center text-secondary py-5">Loading...</p>
         ) : !hasPosted ? (
@@ -66,7 +66,7 @@ export default function Home() {
         ) : (
           <div className="row g-3">
             {posts.map(post => (
-              <div key={post.id} className="col-6">
+              <div key={post.id} className="col-6 col-md-4 col-lg-3">
                 <PostCard post={post} />
               </div>
             ))}
