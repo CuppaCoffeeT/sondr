@@ -56,7 +56,7 @@ export default function Home() {
             <p className="text-coral small mb-3">Share your response to this week's prompt to see what others posted.</p>
             <button
               className="btn bg-sondr-blue text-white rounded-pill fw-bold px-4 py-2"
-              onClick={() => navigate('/camera')}
+              onClick={() => navigate('/capture')}
             >
               CAPTURE NOW
             </button>
