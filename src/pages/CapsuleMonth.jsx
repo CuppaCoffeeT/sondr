@@ -84,7 +84,7 @@ export default function CapsuleMonth() {
           <div className="row g-3">
             {posts.map(post => (
               <div key={post.id} className="col-6">
-                <PostCard post={post} />
+                <PostCard post={post} from={`/capsule/${year}/${month}`} />
               </div>
             ))}
           </div>

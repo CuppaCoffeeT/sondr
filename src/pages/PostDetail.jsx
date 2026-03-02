@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import PromptHeader from '../components/PromptHeader'
@@ -9,7 +9,9 @@ import Avatar from '../components/Avatar'
 export default function PostDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const { session } = useAuth()
+  const backTo = location.state?.from || '/home'
   const [post, setPost] = useState(null)
   const [prompt, setPrompt] = useState(null)
   const [prevId, setPrevId] = useState(null)
@@ -29,7 +31,7 @@ export default function PostDetail() {
       .single()
 
     if (!data) {
-      navigate('/home', { replace: true })
+      navigate(backTo, { replace: true })
       return
     }
 
@@ -95,7 +97,7 @@ export default function PostDetail() {
         <div className="d-flex justify-content-between w-100" style={{ maxWidth: 500 }}>
           <button
             className="btn fs-1 fw-light"
-            onClick={() => prevId && navigate(`/post/${prevId}`)}
+            onClick={() => prevId && navigate(`/post/${prevId}`, { state: { from: backTo } })}
             disabled={!prevId}
             style={{ opacity: prevId ? 1 : 0.2 }}
           >
@@ -103,7 +105,7 @@ export default function PostDetail() {
           </button>
           <button
             className="btn fs-1 fw-light"
-            onClick={() => nextId && navigate(`/post/${nextId}`)}
+            onClick={() => nextId && navigate(`/post/${nextId}`, { state: { from: backTo } })}
             disabled={!nextId}
             style={{ opacity: nextId ? 1 : 0.2 }}
           >
@@ -112,7 +114,7 @@ export default function PostDetail() {
         </div>
 
         <div className="d-flex gap-2">
-          <button className="btn bg-sondr-blue text-white rounded-pill fw-bold px-5 py-2" onClick={() => navigate('/home')}>
+          <button className="btn bg-sondr-blue text-white rounded-pill fw-bold px-5 py-2" onClick={() => navigate(backTo)}>
             BACK
           </button>
           {session?.user?.id === post.user_id && (
@@ -121,7 +123,7 @@ export default function PostDetail() {
               onClick={async () => {
                 if (!confirm('Delete this post?')) return
                 await supabase.from('posts').delete().eq('id', post.id)
-                navigate('/home', { replace: true })
+                navigate(backTo, { replace: true })
               }}
             >
               DELETE

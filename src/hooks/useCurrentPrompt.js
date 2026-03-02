@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
-// Monday of the first week (prompt sort_order 0)
-const BASE_MONDAY = new Date('2026-02-09T00:00:00')
-const MS_PER_WEEK = 7 * 24 * 60 * 60 * 1000
+// Start date for prompt cycling (prompt sort_order 0)
+const BASE_DATE = new Date('2026-02-09T00:00:00')
+const MS_PER_CYCLE = 3 * 24 * 60 * 60 * 1000
 
 export function useCurrentPrompt() {
   const [prompt, setPrompt] = useState(null)
@@ -19,8 +19,8 @@ export function useCurrentPrompt() {
 
       if (data && data.length > 0) {
         const now = new Date()
-        const weeksSinceBase = Math.floor((now - BASE_MONDAY) / MS_PER_WEEK)
-        const index = ((weeksSinceBase % data.length) + data.length) % data.length
+        const cyclesSinceBase = Math.floor((now - BASE_DATE) / MS_PER_CYCLE)
+        const index = ((cyclesSinceBase % data.length) + data.length) % data.length
         setPrompt(data[index])
       }
       setLoading(false)
