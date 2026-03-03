@@ -12,10 +12,12 @@ export default function PostDetail() {
   const location = useLocation()
   const { session } = useAuth()
   const backTo = location.state?.from || '/home'
+  const postIds = location.state?.postIds || null
+  const idx = postIds ? postIds.indexOf(id) : -1
+  const prevId = idx > 0 ? postIds[idx - 1] : null
+  const nextId = idx >= 0 && idx < postIds.length - 1 ? postIds[idx + 1] : null
   const [post, setPost] = useState(null)
   const [prompt, setPrompt] = useState(null)
-  const [prevId, setPrevId] = useState(null)
-  const [nextId, setNextId] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -43,18 +45,6 @@ export default function PostDetail() {
       .eq('id', data.prompt_id)
       .single()
     setPrompt(promptData)
-
-    const { data: allPosts } = await supabase
-      .from('posts')
-      .select('id')
-      .eq('prompt_id', data.prompt_id)
-      .order('created_at', { ascending: false })
-
-    if (allPosts) {
-      const idx = allPosts.findIndex(p => p.id === id)
-      setPrevId(idx > 0 ? allPosts[idx - 1].id : null)
-      setNextId(idx < allPosts.length - 1 ? allPosts[idx + 1].id : null)
-    }
 
     setLoading(false)
   }
@@ -85,33 +75,50 @@ export default function PostDetail() {
             <img src={post.photo_url} alt={post.caption || ''} className="w-100 h-100 aspect-square" />
           </div>
 
-          {/* Story */}
-          {post.story && (
-            <div className="p-3">
-              <p className="text-coral mb-0" style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>{post.story}</p>
+          {/* Caption */}
+          {post.caption && (
+            <div className="bg-sondr-pink px-3 py-2">
+              <p className="text-coral fw-medium mb-0" style={{ fontSize: '0.95rem' }}>
+                "{post.caption}"
+              </p>
             </div>
           )}
         </div>
 
-        {/* Navigation arrows */}
-        <div className="d-flex justify-content-between w-100" style={{ maxWidth: 500 }}>
-          <button
-            className="btn fs-1 fw-light"
-            onClick={() => prevId && navigate(`/post/${prevId}`, { state: { from: backTo } })}
-            disabled={!prevId}
-            style={{ opacity: prevId ? 1 : 0.2 }}
-          >
-            &#8249;
-          </button>
-          <button
-            className="btn fs-1 fw-light"
-            onClick={() => nextId && navigate(`/post/${nextId}`, { state: { from: backTo } })}
-            disabled={!nextId}
-            style={{ opacity: nextId ? 1 : 0.2 }}
-          >
-            &#8250;
-          </button>
-        </div>
+        {/* Story */}
+        {post.story && (
+          <div className="w-100" style={{ maxWidth: 500 }}>
+            <div className="story-section">
+              <div className="text-center px-3 pt-3 pb-2">
+                <p className="text-coral fw-bold mb-0" style={{ fontSize: '0.85rem' }}>Their story</p>
+              </div>
+              <div className="px-3 pb-3">
+                <p className="text-coral mb-0" style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>{post.story}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {postIds && (
+          <div className="d-flex justify-content-between w-100" style={{ maxWidth: 500 }}>
+            <button
+              className="btn fs-1 fw-light"
+              onClick={() => prevId && navigate(`/post/${prevId}`, { state: { from: backTo, postIds } })}
+              disabled={!prevId}
+              style={{ opacity: prevId ? 1 : 0.2 }}
+            >
+              &#8249;
+            </button>
+            <button
+              className="btn fs-1 fw-light"
+              onClick={() => nextId && navigate(`/post/${nextId}`, { state: { from: backTo, postIds } })}
+              disabled={!nextId}
+              style={{ opacity: nextId ? 1 : 0.2 }}
+            >
+              &#8250;
+            </button>
+          </div>
+        )}
 
         <div className="d-flex gap-2">
           <button className="btn bg-sondr-blue text-white rounded-pill fw-bold px-5 py-2" onClick={() => navigate(backTo)}>

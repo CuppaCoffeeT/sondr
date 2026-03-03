@@ -7,6 +7,7 @@ export function AuthProvider({ children }) {
   const [session, setSession] = useState(null)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isRecovery, setIsRecovery] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -15,8 +16,11 @@ export function AuthProvider({ children }) {
       else setLoading(false)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session)
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsRecovery(true)
+      }
       if (session) fetchProfile(session.user.id)
       else {
         setProfile(null)
@@ -70,6 +74,29 @@ export function AuthProvider({ children }) {
     return data
   }
 
+  async function resetPassword(usernameOrEmail) {
+    let email = usernameOrEmail
+    if (!usernameOrEmail.includes('@')) {
+      const { data: prof, error: lookupError } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('username', usernameOrEmail)
+        .single()
+      if (lookupError || !prof) throw new Error('Username not found')
+      email = prof.email
+    }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+    if (error) throw error
+  }
+
+  async function updatePassword(newPassword) {
+    const { error } = await supabase.auth.updateUser({ password: newPassword })
+    if (error) throw error
+    setIsRecovery(false)
+  }
+
   async function signOut() {
     await supabase.auth.signOut()
     setSession(null)
@@ -101,7 +128,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ session, profile, loading, signUp, signIn, signOut, deleteAccount }}>
+    <AuthContext.Provider value={{ session, profile, loading, isRecovery, signUp, signIn, signOut, deleteAccount, resetPassword, updatePassword }}>
       {children}
     </AuthContext.Provider>
   )

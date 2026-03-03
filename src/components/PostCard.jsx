@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 
-export default function PostCard({ post, from }) {
+export default function PostCard({ post, from, postIds }) {
   const navigate = useNavigate()
   const label = post.caption || (post.story ? post.story.slice(0, 30) + (post.story.length > 30 ? '...' : '') : null)
 
   return (
-    <div className="post-card" onClick={() => navigate(`/post/${post.id}`, { state: { from } })}>
+    <div className="post-card" onClick={() => navigate(`/post/${post.id}`, { state: { from, postIds } })}>
       <div style={{ aspectRatio: '1', overflow: 'hidden' }}>
         <img
           src={post.photo_url}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
 // Start date for prompt cycling (prompt sort_order 0)
-const BASE_DATE = new Date('2026-02-09T00:00:00')
+const BASE_DATE = new Date('2026-02-08T00:00:00')
 const MS_PER_CYCLE = 3 * 24 * 60 * 60 * 1000
 
 export function useCurrentPrompt() {

@@ -5,6 +5,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import Home from './pages/Home'
 import PostDetail from './pages/PostDetail'
 import Capture from './pages/Capture'
@@ -12,6 +14,7 @@ import NewPost from './pages/NewPost'
 import MyCapsule from './pages/MyCapsule'
 import CapsuleMonth from './pages/CapsuleMonth'
 import Profile from './pages/Profile'
+import Intro from './pages/Intro'
 import './App.css'
 
 function App() {
@@ -22,6 +25,8 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<Home />} />
@@ -31,6 +36,7 @@ function App() {
             <Route path="/capsule" element={<MyCapsule />} />
             <Route path="/capsule/:year/:month" element={<CapsuleMonth />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/intro" element={<Intro />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

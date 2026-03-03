@@ -47,6 +47,15 @@ export default function Profile() {
           <p className="fw-semibold mb-0">{profile?.phone || 'Not provided'}</p>
         </div>
 
+        <div
+          className="bg-white rounded-3 p-3"
+          style={{ cursor: 'pointer' }}
+          onClick={() => navigate('/intro')}
+        >
+          <p className="text-secondary small mb-1">About Sondr</p>
+          <p className="fw-semibold mb-0 text-sondr-blue">View Introduction</p>
+        </div>
+
         <button
           className="btn bg-sondr-coral text-white rounded-pill fw-bold py-2 mt-3"
           onClick={handleLogout}

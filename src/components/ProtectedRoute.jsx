@@ -1,8 +1,9 @@
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function ProtectedRoute() {
-  const { session, loading } = useAuth()
+  const { session, profile, loading } = useAuth()
+  const location = useLocation()
 
   if (loading) {
     return (
@@ -16,6 +17,10 @@ export default function ProtectedRoute() {
 
   if (!session) {
     return <Navigate to="/" replace />
+  }
+
+  if (profile && !profile.has_seen_intro && location.pathname !== '/intro') {
+    return <Navigate to="/intro" replace />
   }
 
   return <Outlet />

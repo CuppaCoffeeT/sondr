@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useCapture } from '../context/CaptureContext'
@@ -17,8 +17,13 @@ export default function NewPost() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
+  useEffect(() => {
+    if (!photoBlob || !photoPreview) {
+      navigate('/capture', { replace: true })
+    }
+  }, [photoBlob, photoPreview, navigate])
+
   if (!photoBlob || !photoPreview) {
-    navigate('/capture', { replace: true })
     return null
   }
 

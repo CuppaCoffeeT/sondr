@@ -13,43 +13,53 @@ export default function CapsuleMonth() {
   const navigate = useNavigate()
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [activeMonths, setActiveMonths] = useState([])
 
   const monthNum = parseInt(month)
   const yearNum = parseInt(year)
 
   useEffect(() => {
     if (!session) return
-    async function fetchPosts() {
+    async function fetchData() {
       const startDate = new Date(yearNum, monthNum - 1, 1).toISOString()
       const endDate = new Date(yearNum, monthNum, 0, 23, 59, 59).toISOString()
 
-      const { data } = await supabase
-        .from('posts')
-        .select('*, profiles(username, avatar_url)')
-        .eq('user_id', session.user.id)
-        .gte('created_at', startDate)
-        .lte('created_at', endDate)
-        .order('created_at', { ascending: false })
+      const [{ data: monthPosts }, { data: allPosts }] = await Promise.all([
+        supabase
+          .from('posts')
+          .select('*, profiles(username, avatar_url)')
+          .eq('user_id', session.user.id)
+          .gte('created_at', startDate)
+          .lte('created_at', endDate)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('posts')
+          .select('created_at')
+          .eq('user_id', session.user.id)
+          .order('created_at', { ascending: true })
+      ])
 
-      setPosts(data || [])
+      setPosts(monthPosts || [])
+
+      const seen = new Set()
+      const months = []
+      ;(allPosts || []).forEach(p => {
+        const d = new Date(p.created_at)
+        const key = `${d.getFullYear()}-${d.getMonth() + 1}`
+        if (!seen.has(key)) {
+          seen.add(key)
+          months.push({ y: d.getFullYear(), m: d.getMonth() + 1 })
+        }
+      })
+      setActiveMonths(months)
       setLoading(false)
     }
-    fetchPosts()
+    fetchData()
   }, [session, year, month])
 
-  function goPrev() {
-    let m = monthNum - 1
-    let y = yearNum
-    if (m < 1) { m = 12; y-- }
-    navigate(`/capsule/${y}/${m}`)
-  }
-
-  function goNext() {
-    let m = monthNum + 1
-    let y = yearNum
-    if (m > 12) { m = 1; y++ }
-    navigate(`/capsule/${y}/${m}`)
-  }
+  const currentIdx = activeMonths.findIndex(a => a.y === yearNum && a.m === monthNum)
+  const prev = currentIdx > 0 ? activeMonths[currentIdx - 1] : null
+  const next = currentIdx >= 0 && currentIdx < activeMonths.length - 1 ? activeMonths[currentIdx + 1] : null
 
   return (
     <div className="has-bottom-nav">
@@ -69,7 +79,7 @@ export default function CapsuleMonth() {
         </div>
         <div className="text-center mt-2">
           <span className="prompt-pill rounded-pill fw-semibold py-2 px-4 d-inline-block">
-            {MONTH_NAMES[monthNum] || 'MONTH'}
+            {MONTH_NAMES[monthNum] || 'MONTH'} {yearNum}
           </span>
         </div>
       </div>
@@ -84,7 +94,7 @@ export default function CapsuleMonth() {
           <div className="row g-3">
             {posts.map(post => (
               <div key={post.id} className="col-6">
-                <PostCard post={post} from={`/capsule/${year}/${month}`} />
+                <PostCard post={post} from={`/capsule/${year}/${month}`} postIds={posts.map(p => p.id)} />
               </div>
             ))}
           </div>
@@ -92,8 +102,12 @@ export default function CapsuleMonth() {
 
         {/* Month navigation */}
         <div className="d-flex justify-content-between mt-3">
-          <button className="btn fs-1 fw-light" onClick={goPrev}>&#8249;</button>
-          <button className="btn fs-1 fw-light" onClick={goNext}>&#8250;</button>
+          {prev ? (
+            <button className="btn fs-1 fw-light" onClick={() => navigate(`/capsule/${prev.y}/${prev.m}`)}>&#8249;</button>
+          ) : <span />}
+          {next ? (
+            <button className="btn fs-1 fw-light" onClick={() => navigate(`/capsule/${next.y}/${next.m}`)}>&#8250;</button>
+          ) : <span />}
         </div>
       </div>
 
