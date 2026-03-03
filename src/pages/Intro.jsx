@@ -30,15 +30,18 @@ export default function Intro() {
       </div>
 
       <div style={{ maxWidth: 340 }}>
-        <p className="text-coral fw-bold fs-5 mb-4">Welcome to Sondr</p>
-        <p className="fw-medium lh-lg" style={{ color: '#444' }}>
-          Sondr is an app designed to be the antithesis of your average social
-          media. This is about reflections, contemplation and intention. The app
-          will provide you a prompt every 3 days and view posts from that period
-          until they're gone. Think about the prompts that are given, add a photo
-          and a short caption. Share a part of yourself and think about the
-          anonymous stories that other people have to tell.
-        </p>
+        <p className="text-coral fw-bold fs-5 mb-3">Not another feed. A mirror.</p>
+        <div className="d-flex flex-column gap-3 text-start" style={{ color: '#444' }}>
+          <p className="fw-medium mb-0" style={{ lineHeight: 1.7 }}>
+            Every 3 days, one shared prompt. Your job: capture a photo, write a few words, and share a piece of your story.
+          </p>
+          <p className="fw-medium mb-0" style={{ lineHeight: 1.7 }}>
+            Then see how others answered the same question — anonymously, honestly, differently.
+          </p>
+          <p className="fw-medium mb-0" style={{ lineHeight: 1.7, color: 'var(--color-coral)' }}>
+            No likes. No followers. Just stories.
+          </p>
+        </div>
       </div>
 
       <button
