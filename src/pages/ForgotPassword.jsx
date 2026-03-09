@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import posthog from 'posthog-js'
 import { useAuth } from '../context/AuthContext'
 
 export default function ForgotPassword() {
@@ -16,6 +17,8 @@ export default function ForgotPassword() {
     setLoading(true)
     try {
       await resetPassword(usernameOrEmail)
+      posthog.capture('password_reset_requested')
+      window.gtag?.('event', 'password_reset_requested')
       setSuccess(true)
     } catch (err) {
       setError(err.message || 'Something went wrong')

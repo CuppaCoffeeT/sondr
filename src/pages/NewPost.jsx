@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import posthog from 'posthog-js'
 import { useAuth } from '../context/AuthContext'
 import { useCapture } from '../context/CaptureContext'
 import { useCurrentPrompt } from '../hooks/useCurrentPrompt'
@@ -59,6 +60,8 @@ export default function NewPost() {
 
       if (insertError) throw insertError
 
+      posthog.capture('post_created', { has_caption: !!caption, has_story: !!story })
+      window.gtag?.('event', 'post_created', { has_caption: !!caption, has_story: !!story })
       clearPhoto()
       navigate('/home', { replace: true })
     } catch (err) {

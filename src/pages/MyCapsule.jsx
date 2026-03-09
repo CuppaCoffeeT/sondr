@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import posthog from 'posthog-js'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import BottomNav from '../components/BottomNav'
@@ -36,6 +37,8 @@ export default function MyCapsule() {
       })
       setMonthData(grouped)
       setLoading(false)
+      posthog.capture('capsule_viewed', { year: selectedYear })
+      window.gtag?.('event', 'capsule_viewed', { year: selectedYear })
     }
     fetchPosts()
   }, [session, selectedYear])

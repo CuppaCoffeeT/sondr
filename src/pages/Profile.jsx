@@ -1,10 +1,17 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import posthog from 'posthog-js'
 import { useAuth } from '../context/AuthContext'
 import BottomNav from '../components/BottomNav'
 
 export default function Profile() {
   const { profile, signOut } = useAuth()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    posthog.capture('profile_viewed')
+    window.gtag?.('event', 'profile_viewed')
+  }, [])
 
   async function handleLogout() {
     await signOut()

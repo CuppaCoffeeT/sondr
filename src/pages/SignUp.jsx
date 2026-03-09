@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import posthog from 'posthog-js'
 import { useAuth } from '../context/AuthContext'
 
 export default function SignUp() {
@@ -25,6 +26,8 @@ export default function SignUp() {
     setLoading(true)
     try {
       await signUp(username, email, phone, password)
+      posthog.capture('user_signed_up')
+      window.gtag?.('event', 'sign_up')
       navigate('/home', { replace: true })
     } catch (err) {
       setError(err.message || 'Sign up failed')

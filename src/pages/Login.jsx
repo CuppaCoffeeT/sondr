@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import posthog from 'posthog-js'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
@@ -17,6 +18,8 @@ export default function Login() {
     setLoading(true)
     try {
       await signIn(username, password)
+      posthog.capture('user_logged_in')
+      window.gtag?.('event', 'login')
       navigate('/home', { replace: true })
     } catch (err) {
       setError(err.message || 'Login failed')

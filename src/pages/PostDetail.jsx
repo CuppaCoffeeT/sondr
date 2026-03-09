@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import posthog from 'posthog-js'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import PromptHeader from '../components/PromptHeader'
@@ -38,6 +39,8 @@ export default function PostDetail() {
     }
 
     setPost(data)
+    posthog.capture('post_viewed', { post_id: data.id })
+    window.gtag?.('event', 'post_viewed', { post_id: data.id })
 
     const { data: promptData } = await supabase
       .from('prompts')
@@ -130,6 +133,8 @@ export default function PostDetail() {
               onClick={async () => {
                 if (!confirm('Delete this post?')) return
                 await supabase.from('posts').delete().eq('id', post.id)
+                posthog.capture('post_deleted', { post_id: post.id })
+                window.gtag?.('event', 'post_deleted', { post_id: post.id })
                 navigate(backTo, { replace: true })
               }}
             >

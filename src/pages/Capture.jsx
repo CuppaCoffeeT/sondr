@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import posthog from 'posthog-js'
 import { useCurrentPrompt } from '../hooks/useCurrentPrompt'
 import { useCapture } from '../context/CaptureContext'
 import PromptHeader from '../components/PromptHeader'
@@ -52,6 +53,8 @@ export default function Capture() {
       setPhoto(blob)
       setCaptured(true)
       stopCamera()
+      posthog.capture('photo_captured', { method: 'camera' })
+      window.gtag?.('event', 'photo_captured', { method: 'camera' })
     }, 'image/jpeg', 0.85)
   }
 
@@ -61,6 +64,8 @@ export default function Capture() {
       setPhoto(file)
       setCaptured(true)
       stopCamera()
+      posthog.capture('photo_captured', { method: 'upload' })
+      window.gtag?.('event', 'photo_captured', { method: 'upload' })
     }
   }
 
