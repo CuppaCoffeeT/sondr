@@ -17,6 +17,8 @@ body {
 
 #root {
   min-height: 100dvh;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
 img {
@@ -65,8 +67,10 @@ img {
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
   height: calc(var(--nav-height) + env(safe-area-inset-bottom, 0px));
   z-index: 1030;
   padding-bottom: env(safe-area-inset-bottom, 0px);
