@@ -1,0 +1,142 @@
+/* Add these to your existing styles.css */
+
+/* Prompt card */
+.prompt-card-title {
+    margin: 0 0 10px 0;
+    color: var(--text-primary);
+}
+
+.prompt-index {
+    font-size: 12px;
+    color: #666;
+    margin: 10px 0 0 0;
+    text-align: right;
+}
+
+/* Form elements */
+.prompt-response-label {
+    font-style: italic;
+    color: #b97a2f;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.post-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--border-radius-xs);
+    font-size: 1rem;
+    font-family: 'Roboto Serif', serif;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.file-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--border-radius-xs);
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Form hints */
+.hint-title {
+    font-weight: bold;
+    margin: 0 0 0.5rem 0;
+}
+
+.hint-list {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0 0 1rem 0;
+    padding-left: 1.5rem;
+}
+
+/* Auth components */
+.auth-card-title {
+    margin-top: 0;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--border-radius-xs);
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Status messages */
+.status-message {
+    margin: 0;
+}
+
+/* Empty state */
+.empty-message {
+    text-align: center;
+    margin: 0;
+}
+
+/* Recent posts */
+.section-title {
+    border-bottom: 2px solid var(--accent-dark);
+    padding-bottom: 0.5rem;
+    margin-top: 2rem;
+    color: var(--text-primary);
+}
+
+.more-posts-hint {
+    text-align: right;
+    font-style: italic;
+    color: #666;
+}
+
+/* Error page */
+.error-card {
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.error-title {
+    color: var(--text-primary);
+}
+
+.error-message {
+    font-size: 1.1rem;
+}
+
+.error-details {
+    color: #d32f2f;
+    font-size: 0.9rem;
+    margin: 1rem 0;
+}
+
+/* Preview components */
+.preview-title {
+    margin: 0 0 1rem 0;
+}
+
+.preview-label {
+    font-weight: bold;
+    margin: 0;
+}
+
+.preview-prompt {
+    font-style: italic;
+    color: #b97a2f;
+    margin: 0.5rem 0;
+}
+
+.preview-count {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.preview-cta {
+    margin: 1rem 0 0 0;
+    font-size: 0.9rem;
+}
+
+.preview-card {
+    text-align: center;
+}

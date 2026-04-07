@@ -15,6 +15,7 @@ import MyCapsule from './pages/MyCapsule'
 import CapsuleMonth from './pages/CapsuleMonth'
 import Profile from './pages/Profile'
 import Intro from './pages/Intro'
+import TestVer from './pages/TestVer'
 import './App.css'
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             <Route path="/capsule/:year/:month" element={<CapsuleMonth />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/intro" element={<Intro />} />
+            <Route path="/test-ver" element={<TestVer />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" replace />} />

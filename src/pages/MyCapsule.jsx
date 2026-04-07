@@ -79,6 +79,12 @@ export default function MyCapsule() {
               >
                 <button
                   className="btn btn-sm w-100 text-start px-3 py-2"
+                  onClick={() => { setShowMenu(false); navigate('/test-ver') }}
+                >
+                  Test Ver
+                </button>
+                <button
+                  className="btn btn-sm w-100 text-start px-3 py-2"
                   onClick={() => { signOut(); navigate('/', { replace: true }) }}
                 >
                   Log Out
