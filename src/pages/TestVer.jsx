@@ -17,7 +17,6 @@ export default function TestVer() {
 
   const [todayPosts, setTodayPosts] = useState([])
   const [myPosts, setMyPosts] = useState([])
-  const [hasPostedToday, setHasPostedToday] = useState(false)
   const [loadingPosts, setLoadingPosts] = useState(true)
 
   const shuffledPosts = useMemo(() => {
@@ -46,15 +45,6 @@ export default function TestVer() {
       .order('created_at', { ascending: false })
 
     setTodayPosts(allPosts || [])
-
-    // Check if user posted for this prompt
-    const { data: userPosts } = await supabase
-      .from('posts')
-      .select('id, caption, story, photo_url, created_at')
-      .eq('prompt_id', prompt.id)
-      .eq('user_id', userId)
-
-    setHasPostedToday(userPosts && userPosts.length > 0)
 
     // Get user's recent posts
     const { data: recent } = await supabase
@@ -158,55 +148,42 @@ export default function TestVer() {
           </div>
         )}
 
-        {/* Daily Post Status */}
-        <div className={`tv-status ${hasPostedToday ? 'tv-status-info' : 'tv-status-success'}`}>
-          Daily post status: {hasPostedToday
-            ? "You've already posted for this prompt"
-            : 'You can post today'}
+        {/* Post Form */}
+        <div>
+          <h2 className="tv-form-title">Create a Post</h2>
+          <p className="tv-prompt-label">Respond to: {prompt?.text}</p>
+          <form className="tv-form-container" onSubmit={handleSubmit}>
+            <textarea
+              className="tv-textarea"
+              placeholder="Write your response here..."
+              rows={6}
+              value={content}
+              onChange={e => setContent(e.target.value)}
+              required
+            />
+            <input
+              type="file"
+              className="tv-file-input"
+              accept=".jpg,.jpeg,.heic,.heif,.png"
+              onChange={e => setImageFile(e.target.files?.[0] || null)}
+            />
+            <div className="tv-file-hint">
+              <p>Image tips:</p>
+              <ul>
+                <li>JPEG, PNG, and HEIC (iPhone) formats supported</li>
+                <li>Maximum file size: 5MB</li>
+                <li>Optional — text-only posts are welcome</li>
+              </ul>
+            </div>
+            {error && <div className="tv-error">{error}</div>}
+            <button type="submit" className="tv-btn-primary" disabled={posting}>
+              {posting ? 'Submitting...' : 'Submit Post'}
+            </button>
+          </form>
         </div>
 
-        {/* Post Form */}
-        {!hasPostedToday ? (
-          <div>
-            <h2 className="tv-form-title">Create a Post</h2>
-            <p className="tv-prompt-label">Respond to: {prompt?.text}</p>
-            <form className="tv-form-container" onSubmit={handleSubmit}>
-              <textarea
-                className="tv-textarea"
-                placeholder="Write your response here..."
-                rows={6}
-                value={content}
-                onChange={e => setContent(e.target.value)}
-                required
-              />
-              <input
-                type="file"
-                className="tv-file-input"
-                accept=".jpg,.jpeg,.heic,.heif,.png"
-                onChange={e => setImageFile(e.target.files?.[0] || null)}
-              />
-              <div className="tv-file-hint">
-                <p>Image tips:</p>
-                <ul>
-                  <li>JPEG, PNG, and HEIC (iPhone) formats supported</li>
-                  <li>Maximum file size: 5MB</li>
-                  <li>Optional — text-only posts are welcome</li>
-                </ul>
-              </div>
-              {error && <div className="tv-error">{error}</div>}
-              <button type="submit" className="tv-btn-primary" disabled={posting}>
-                {posting ? 'Submitting...' : 'Submit Post'}
-              </button>
-            </form>
-          </div>
-        ) : (
-          <div className="tv-empty-state">
-            You've already posted for this prompt! Come back for the next one.
-          </div>
-        )}
-
         {/* Today's Gallery */}
-        {hasPostedToday && todayPosts.length > 0 && (
+        {todayPosts.length > 0 && (
           <div className="tv-gallery">
             <h2 className="tv-gallery-title">Today's Gallery</h2>
             <p className="tv-gallery-count">
