@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 import { AuthProvider } from './context/AuthContext'
 import { CaptureProvider } from './context/CaptureContext'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -41,6 +42,7 @@ function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <Analytics />
       </CaptureProvider>
     </AuthProvider>
   )
